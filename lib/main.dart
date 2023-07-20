@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'home.dart';
+import 'screens/home.dart';
+import 'screens/loading_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,10 +12,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(appBarTheme: AppBarTheme(foregroundColor: Colors.black)),
       home: Directionality(
         textDirection: TextDirection.rtl,
-        child: MyHomePage(),
+        child: LoadingScreen(),
       ),
     );
   }
