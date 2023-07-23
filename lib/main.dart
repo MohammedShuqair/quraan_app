@@ -8,7 +8,8 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
-        create: (BuildContext context) => PageProvider()..createTable(context),
+        create: (BuildContext context) =>
+            BookmarkProvider()..createTable(context),
       ),
     ],
     child: const MyApp(),

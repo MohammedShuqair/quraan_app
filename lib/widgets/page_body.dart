@@ -17,7 +17,7 @@ class PageBody extends StatefulWidget {
     this.firstPageNum = 1,
     // this.function,
     this.isPartScreen = false,
-    // this.bookmark,
+    this.bookmark,
   });
 
   final int firstPageNum;
@@ -27,7 +27,7 @@ class PageBody extends StatefulWidget {
   // final ConnectivityResult? connectivityResult;
   // final Function(double progress)? function;
   final bool isPartScreen;
-  // final Bookmark? bookmark;
+  final Bookmark? bookmark;
 
   @override
   State<PageBody> createState() => _PageBodyState();
@@ -54,7 +54,6 @@ class _PageBodyState extends State<PageBody> {
   Widget build(BuildContext context) {
     return Consumer<PageProvider>(
       builder: (context, provider, child) {
-        print("screen bookmark${provider.getBookmark()}");
         return PageView.builder(
           controller: provider.getController(),
           physics:
@@ -70,7 +69,7 @@ class _PageBodyState extends State<PageBody> {
               page: widget.pages[index].suras,
               connectivityResult: provider.getConnectivityResult(),
               isPartScreen: widget.isPartScreen,
-              // bookmark: widget.bookmark,
+              bookmark: widget.bookmark,
             );
           },
           itemCount: widget.pages.length,

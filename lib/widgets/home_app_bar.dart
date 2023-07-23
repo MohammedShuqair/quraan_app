@@ -5,9 +5,11 @@ import 'package:tt9_quraan_app/servises/page/page_provider.dart';
 import 'alert.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const HomeAppBar({
-    Key? key,
-  }) : super(key: key);
+  const HomeAppBar(
+      {Key? key, this.title = 'القرءان الكريم', required this.pageLength})
+      : super(key: key);
+  final String title;
+  final int pageLength;
 
   @override
   Size get preferredSize => const Size.fromHeight(100);
@@ -20,7 +22,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           backgroundColor: const Color(0xfffff7eb),
           elevation: 0,
           title: Text(
-            provider.title,
+            title,
             style: const TextStyle(
               fontSize: 24,
               color: Colors.black,
@@ -55,7 +57,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   onSubmitted: (v) {
                     int? pageNo = int.tryParse(v);
                     if (pageNo != null &&
-                        (pageNo >= 1 && pageNo <= provider.getPagesLength())) {
+                        (pageNo >= 1 && pageNo <= pageLength)) {
                       provider.animateTo(
                         pageNo - 1,
                       );

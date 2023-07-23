@@ -7,7 +7,6 @@ import 'package:tt9_quraan_app/servises/provider.dart';
 import '../models/aya.dart';
 import '../models/tafseer.dart';
 import '../servises/network.dart';
-import '../servises/page/page_provider.dart';
 import '../shared/functionalty.dart';
 
 class QPageScreen extends StatefulWidget {
@@ -16,7 +15,7 @@ class QPageScreen extends StatefulWidget {
     required this.pageNumber,
     required this.page,
     this.connectivityResult,
-    // this.bookmark,
+    this.bookmark,
     this.isPartScreen = false,
     required this.index,
     // required this.scale,
@@ -26,8 +25,7 @@ class QPageScreen extends StatefulWidget {
   final int pageNumber;
   final int index;
   final List<Sura> page;
-
-  // final Bookmark? bookmark;
+  final Bookmark? bookmark;
   final bool isPartScreen;
 
   // final double scale;
@@ -108,7 +106,7 @@ class _QPageScreenState extends State<QPageScreen> {
                     padding: const EdgeInsets.only(bottom: 8),
                     decoration:
                         BoxDecoration(border: Border.all(color: Colors.red)),
-                    child: Consumer<PageProvider>(
+                    child: Consumer<BookmarkProvider>(
                       builder: (context, provider, child) {
                         return Text.rich(
                           TextSpan(
@@ -177,7 +175,8 @@ class _QPageScreenState extends State<QPageScreen> {
                                     text: ' ${widget.page[i].sura[j].ayaText} ',
                                     style: TextStyle(
                                         backgroundColor: isMarked(
-                                                provider.getBookmark(),
+                                                getBookMark(
+                                                    provider.bookmarks, 0),
                                                 widget.page[i].sura[j].suraNo ??
                                                     1,
                                                 widget.page[i].sura[j].ayaNo ??
@@ -215,7 +214,7 @@ class _QPageScreenState extends State<QPageScreen> {
 
   void onLongPress(
     BuildContext context,
-    PageProvider provider, {
+    BookmarkProvider provider, {
     required Bookmark bookmark,
   }) async {
     print('book mark $bookmark');

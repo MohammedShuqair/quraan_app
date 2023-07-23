@@ -6,26 +6,23 @@ import 'package:tt9_quraan_app/widgets/alert.dart';
 import 'database_helper.dart';
 
 class BookmarkProvider extends ChangeNotifier {
-  // late Database database;
-  // static const String tableName = 'bookmark';
-  // List<Bookmark> bookmarks = [];
-  // Future<void> createTable(BuildContext context) async {
-  //   database = await createDatabase(context, [
-  //     'CREATE TABLE bookmark ( id INTEGER PRIMARY KEY , pageNo INTEGER, suraNo INTEGER, ayaNo INTEGER)'
-  //   ]);
-  // }
-  //
-  // Future<void> insertToBookmarks(
-  //   BuildContext context, {
-  //   required Bookmark bookmark,
-  // }) async {
-  //   bookmarks =
-  //       await insertToDataBase(context, database: database, bookmark: bookmark);
-  //   notifyListeners();
-  // }
+  late Database database;
+  static const String tableName = 'bookmark';
+  List<Bookmark> bookmarks = [];
+  Future<void> createTable(BuildContext context) async {
+    database = await createDatabase(context, [
+      'CREATE TABLE bookmark ( id INTEGER PRIMARY KEY , pageNo INTEGER, suraNo INTEGER, ayaNo INTEGER)'
+    ]);
+  }
 
-  ////////////////////////////////////////////////////////////////////
-
+  Future<void> insertToBookmarks(
+    BuildContext context, {
+    required Bookmark bookmark,
+  }) async {
+    bookmarks =
+        await insertToDataBase(context, database: database, bookmark: bookmark);
+    notifyListeners();
+  }
   // Future<void> createDatabase(BuildContext context) async {
   //   await openDatabase('q.db', version: 1, onCreate: (database, version) async {
   //     print('Database Created');

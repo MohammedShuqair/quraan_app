@@ -64,7 +64,10 @@ class _PartScreenState extends State<PartScreen> {
       child: Consumer<PageProvider>(
         builder: (context, provider, child) {
           return Scaffold(
-            appBar: HomeAppBar(),
+            appBar: HomeAppBar(
+              title: widget.partName,
+              pageLength: widget.pages.length,
+            ),
             body: Consumer<BookmarkProvider>(
               builder: (context, provider, child) {
                 return PageBody(
@@ -79,7 +82,7 @@ class _PartScreenState extends State<PartScreen> {
                   //   });
                   // },
                   isPartScreen: true,
-                  // bookmark: getBookMark(provider.bookmarks, widget.partNo),
+                  bookmark: getBookMark(provider.bookmarks, widget.partNo),
                 );
               },
             ),

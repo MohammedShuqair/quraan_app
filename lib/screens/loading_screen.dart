@@ -65,9 +65,8 @@ class LoadingScreenState extends State<LoadingScreen> {
         //   page: page,
         // );
         return ChangeNotifierProvider(
-          create: (BuildContext context) =>
-              PageProvider()..init(context, pages),
-          child: QuranScreen(
+          create: (BuildContext context) => PageProvider()..init(context),
+          child: AllPagesScreen(
             pages: pages,
           ),
         );
