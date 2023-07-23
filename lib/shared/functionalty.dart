@@ -1,3 +1,15 @@
+import '../models/bookmark.dart';
+
+Bookmark? getBookMark(List<Bookmark>bookmarks,int by){
+  Bookmark? b;
+  bookmarks.forEach((element) {
+    if(element.id==by){
+      b= element;
+    }
+  });
+  return b;
+}
+
 String getJozzName(int value) {
   switch (value) {
     case 1:

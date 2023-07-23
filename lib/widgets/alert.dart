@@ -11,7 +11,7 @@ void showSnackBar(BuildContext context,
       backgroundColor: error ? Colors.red : Colors.black,
       duration: const Duration(seconds: 2),
       dismissDirection: DismissDirection.horizontal,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(18))),
     ),
   );

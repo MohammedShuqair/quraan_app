@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tt9_quraan_app/models/page.dart';
-import 'package:tt9_quraan_app/widgets/home_app_bar.dart';
 import 'package:tt9_quraan_app/widgets/quran_page.dart';
 
 import '../models/aya.dart';
@@ -31,7 +30,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var controller;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -68,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
               itemBuilder: (context, index) {
                 return QPageScreen(
                   pageNumber: pageNumber,
-                  page: widget.page.suras,
+                  page: widget.page.suras, index: index,
                   // scale: scale,
                 );
               },

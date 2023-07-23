@@ -17,12 +17,12 @@ class TafseerSource {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['language'] = this.language;
-    data['author'] = this.author;
-    data['book_name'] = this.bookName;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['language'] = language;
+    data['author'] = author;
+    data['book_name'] = bookName;
     return data;
   }
 }

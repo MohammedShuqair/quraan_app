@@ -1,26 +1,26 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:tt9_quraan_app/models/juz.dart';
+import 'package:provider/provider.dart';
 import 'package:tt9_quraan_app/models/page.dart';
+import 'package:tt9_quraan_app/servises/page/page_provider.dart';
+import 'package:tt9_quraan_app/servises/provider.dart';
 import 'package:tt9_quraan_app/shared/functionalty.dart';
 import 'package:tt9_quraan_app/widgets/alert.dart';
 import 'package:tt9_quraan_app/widgets/home_app_bar.dart';
-import 'package:tt9_quraan_app/widgets/quran_page.dart';
-
-import '../models/aya.dart';
-import '../servises/network_connectivity.dart';
 import '../widgets/page_body.dart';
 
 class PartScreen extends StatefulWidget {
   const PartScreen(
       {Key? key,
       required this.pages,
-      required this.part,
+      required this.partName,
       required this.firstPageNum,
-      this.connectivityResult})
+      this.connectivityResult,
+      required this.partNo})
       : super(key: key);
   final List<QPage> pages;
-  final String part;
+  final String partName;
+  final int partNo;
   final int firstPageNum;
   final ConnectivityResult? connectivityResult;
 
@@ -36,6 +36,7 @@ class _PartScreenState extends State<PartScreen> {
   void initState() {
     super.initState();
     controller = PageController();
+
     // controller.addListener(_onPageChanged);
   }
 
@@ -46,6 +47,7 @@ class _PartScreenState extends State<PartScreen> {
   }
 
   double progress = 0;
+
   // int _currentPage = 0;
   // void _onPageChanged() {
   //   setState(() {
@@ -59,42 +61,30 @@ class _PartScreenState extends State<PartScreen> {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: HomeAppBar(
-            progress: /*(_currentPage + 1) / widget.pages.length*/ progress,
-            title: widget.part,
-            onSubmitted: (textController) {
-              int? pageNo = int.tryParse(textController.text);
-              if (pageNo != null &&
-                  (pageNo >= widget.firstPageNum &&
-                      pageNo <=
-                          (widget.firstPageNum + widget.pages.length) - 1)) {
-                controller.animateToPage(pageNo - widget.firstPageNum,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.ease);
-                textController.clear();
-              } else {
-                showSnackBar(context, message: 'الرجاء ادخال ؤقم صحيح');
-              }
-            },
-            onTap: () {
-              setState(() {
-                isPined = !isPined;
-              });
-            },
-            isPined: isPined),
-        body: PageBody(
-          controller: controller,
-          isPined: isPined,
-          pages: widget.pages,
-          connectivityResult: widget.connectivityResult,
-          firstPageNum: widget.firstPageNum,
-          function: (double progress) {
-            setState(() {
-              this.progress = progress;
-            });
-          },
-        ),
+      child: Consumer<PageProvider>(
+        builder: (context, provider, child) {
+          return Scaffold(
+            appBar: HomeAppBar(),
+            body: Consumer<BookmarkProvider>(
+              builder: (context, provider, child) {
+                return PageBody(
+                  // controller: controller,
+                  // isPined: isPined,
+                  pages: widget.pages,
+                  // connectivityResult: widget.connectivityResult,
+                  firstPageNum: widget.firstPageNum,
+                  // function: (double progress) {
+                  //   setState(() {
+                  //     this.progress = progress;
+                  //   });
+                  // },
+                  isPartScreen: true,
+                  // bookmark: getBookMark(provider.bookmarks, widget.partNo),
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }

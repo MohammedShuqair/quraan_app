@@ -1,13 +1,13 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:tt9_quraan_app/models/tafseer_source.dart';
-import 'package:tt9_quraan_app/widgets/alert.dart';
-
+import 'package:provider/provider.dart';
+import 'package:tt9_quraan_app/models/bookmark.dart';
+import 'package:tt9_quraan_app/servises/provider.dart';
 import '../models/aya.dart';
-import '../models/page.dart';
 import '../models/tafseer.dart';
 import '../servises/network.dart';
+import '../servises/page/page_provider.dart';
 import '../shared/functionalty.dart';
 
 class QPageScreen extends StatefulWidget {
@@ -16,11 +16,19 @@ class QPageScreen extends StatefulWidget {
     required this.pageNumber,
     required this.page,
     this.connectivityResult,
+    // this.bookmark,
+    this.isPartScreen = false,
+    required this.index,
     // required this.scale,
   });
+
   final ConnectivityResult? connectivityResult;
   final int pageNumber;
+  final int index;
   final List<Sura> page;
+
+  // final Bookmark? bookmark;
+  final bool isPartScreen;
 
   // final double scale;
 
@@ -31,6 +39,16 @@ class QPageScreen extends StatefulWidget {
 class _QPageScreenState extends State<QPageScreen> {
   double scale = 1.0;
 
+  bool isMarked(Bookmark? bookmark, int suraNo, int ayaNo) {
+    if (bookmark != null &&
+        bookmark.suraNo == suraNo &&
+        bookmark.ayaNo == ayaNo) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -38,7 +56,6 @@ class _QPageScreenState extends State<QPageScreen> {
         setState(() {
           scale = d.scale;
         });
-        print(d.scale);
       },
       child: Container(
         alignment: Alignment.center,
@@ -91,70 +108,92 @@ class _QPageScreenState extends State<QPageScreen> {
                     padding: const EdgeInsets.only(bottom: 8),
                     decoration:
                         BoxDecoration(border: Border.all(color: Colors.red)),
-                    child: Text.rich(
-                      TextSpan(
-                        children: [
-                          for (int j = 0;
-                              j < widget.page[i].sura.length;
-                              j++) ...{
-                            WidgetSpan(
-                              child: Visibility(
-                                visible: widget.page[i].sura[j].ayaNo == 1,
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      margin: const EdgeInsets.only(bottom: 8),
-                                      height: 60,
-                                      width: double.infinity,
-                                      decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: AssetImage(
-                                            'images/head_of_surah.png',
+                    child: Consumer<PageProvider>(
+                      builder: (context, provider, child) {
+                        return Text.rich(
+                          TextSpan(
+                            children: [
+                              for (int j = 0;
+                                  j < widget.page[i].sura.length;
+                                  j++) ...{
+                                WidgetSpan(
+                                  child: Visibility(
+                                    visible: widget.page[i].sura[j].ayaNo == 1,
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.center,
+                                          margin:
+                                              const EdgeInsets.only(bottom: 8),
+                                          height: 60,
+                                          width: double.infinity,
+                                          decoration: const BoxDecoration(
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: AssetImage(
+                                                'images/head_of_surah.png',
+                                              ),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            widget.page[i].suraNameAr ?? '',
+                                            style: const TextStyle(
+                                                fontSize: 30,
+                                                fontFamily: 'Al-QuranAlKareem'),
                                           ),
                                         ),
-                                      ),
-                                      child: Text(
-                                        widget.page[i].suraNameAr ?? '',
-                                        style: const TextStyle(
-                                            fontSize: 30,
-                                            fontFamily: 'Al-QuranAlKareem'),
-                                      ),
+                                        Visibility(
+                                            visible: widget.page[i].sura[j]
+                                                        .suraNo !=
+                                                    1 &&
+                                                widget.page[i].sura[j].suraNo !=
+                                                    9,
+                                            child: const Text(
+                                              'بسم الله الرحمن الرحيم',
+                                              style: TextStyle(
+                                                  fontSize: 24,
+                                                  color: Colors.black,
+                                                  fontFamily: 'HafsSmart'),
+                                            ))
+                                      ],
                                     ),
-                                    Visibility(
-                                        visible: widget
-                                                    .page[i].sura[j].suraNo !=
-                                                1 &&
-                                            widget.page[i].sura[j].suraNo != 9,
-                                        child: const Text(
-                                          'بسم الله الرحمن الرحيم',
-                                          style: TextStyle(
-                                              fontSize: 24,
-                                              color: Colors.black,
-                                              fontFamily: 'HafsSmart'),
-                                        ))
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ),
-                            TextSpan(
-                                recognizer: LongPressGestureRecognizer(
-                                  duration: const Duration(milliseconds: 200),
-                                )..onLongPress = () => onLongPress(
-                                    context,
-                                    widget.page[i].sura[j].suraNo ?? 1,
-                                    widget.page[i].sura[j].ayaNo ?? 1),
-                                text: ' ${widget.page[i].sura[j].ayaText} ',
-                                style: const TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.black,
-                                    fontFamily: 'HafsSmart')),
-                          },
-                        ],
-                      ),
-                      textAlign: TextAlign.center,
-                      textScaleFactor: scale,
+                                TextSpan(
+                                    recognizer: LongPressGestureRecognizer(
+                                      duration:
+                                          const Duration(milliseconds: 200),
+                                    )..onLongPress = () {
+                                        Aya aya = widget.page[i].sura[j];
+                                        onLongPress(context, provider,
+                                            bookmark: Bookmark(
+                                                widget.isPartScreen
+                                                    ? aya.jozz ?? 0
+                                                    : 0,
+                                                widget.index,
+                                                aya.suraNo ?? 1,
+                                                aya.ayaNo ?? 1));
+                                      },
+                                    text: ' ${widget.page[i].sura[j].ayaText} ',
+                                    style: TextStyle(
+                                        backgroundColor: isMarked(
+                                                provider.getBookmark(),
+                                                widget.page[i].sura[j].suraNo ??
+                                                    1,
+                                                widget.page[i].sura[j].ayaNo ??
+                                                    1)
+                                            ? Colors.red
+                                            : null,
+                                        fontSize: 18,
+                                        color: Colors.black,
+                                        fontFamily: 'HafsSmart')),
+                              },
+                            ],
+                          ),
+                          textAlign: TextAlign.center,
+                          textScaleFactor: scale,
+                        );
+                      },
                     ),
                   ),
                 },
@@ -176,37 +215,71 @@ class _QPageScreenState extends State<QPageScreen> {
 
   void onLongPress(
     BuildContext context,
+    PageProvider provider, {
+    required Bookmark bookmark,
+  }) async {
+    print('book mark $bookmark');
+    showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(15),
+          ),
+        ),
+        builder: (context) {
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                InkWell(
+                    onTap: () {
+                      provider.insertToBookmarks(context, bookmark: bookmark);
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.all(12),
+                      child: SizedBox(
+                        height: 44,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.bookmark,
+                            ),
+                            Text('حفظ التقدم')
+                          ],
+                        ),
+                      ),
+                    )),
+                tafseerBody(bookmark.suraNo, bookmark.ayaNo),
+              ],
+            ),
+          );
+        });
+  }
+
+  Widget tafseerBody(
     int soraNo,
     int ayaNo,
-  ) async {
+  ) {
     if (widget.connectivityResult == ConnectivityResult.mobile ||
         widget.connectivityResult == ConnectivityResult.wifi ||
         widget.connectivityResult == ConnectivityResult.ethernet) {
+      Future<Tafseer> tafseer = Network().fetchTafseer(context, soraNo, ayaNo);
       // List<TafseerSource> sources =
       //     await Network().fetchTafseerSources(context);
-      Tafseer tafseer = await Network().fetchTafseer(context, soraNo, ayaNo);
-
-      if (mounted) {
-        showModalBottomSheet(
-            context: context,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(15),
-              ),
-            ),
-            builder: (context) {
-              return Container(
-                  padding: const EdgeInsets.all(16),
-                  // height: 300,
-                  child: Text(
-                    '${tafseer.text}',
-                    style: const TextStyle(fontFamily: 'monospace'),
-                  ));
-            });
-      }
+      return FutureBuilder<Tafseer>(
+          future: tafseer,
+          builder: (context, snapshot) {
+            return Container(
+                padding: const EdgeInsets.all(16),
+                // height: 300,
+                child: Text(
+                  snapshot.data?.text ?? "الرجاء لانتظار",
+                  style: const TextStyle(fontFamily: 'monospace'),
+                ));
+          });
     } else {
-      showSnackBar(context,
-          message: 'الرجاء الاتصال بالانترنت لتفعيل ميزة التفسير');
+      return const SizedBox();
     }
   }
 }

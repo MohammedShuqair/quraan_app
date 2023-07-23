@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tt9_quraan_app/models/page.dart';
-import 'package:tt9_quraan_app/widgets/home_app_bar.dart';
-import 'package:tt9_quraan_app/widgets/quran_page.dart';
 
 class PreBuildPages extends StatefulWidget {
   const PreBuildPages({
@@ -27,23 +25,23 @@ class _PreBuildPagesState extends State<PreBuildPages> {
 
   @override
   void initState() {
-    qPages = [
-      QPageScreen(
-        pageNumber: 1,
-        page: widget.pages[0].suras,
-        // scale: scale,
-      ),
-      QPageScreen(
-        pageNumber: 2,
-        page: widget.pages[1].suras,
-        // scale: scale,
-      ),
-      QPageScreen(
-        pageNumber: 3,
-        page: widget.pages[2].suras,
-        // scale: scale,
-      ),
-    ];
+    // qPages = [
+    //   QPageScreen(
+    //     pageNumber: 1,
+    //     page: widget.pages[0].suras,
+    //     // scale: scale,
+    //   ),
+    //   QPageScreen(
+    //     pageNumber: 2,
+    //     page: widget.pages[1].suras,
+    //     // scale: scale,
+    //   ),
+    //   QPageScreen(
+    //     pageNumber: 3,
+    //     page: widget.pages[2].suras,
+    //     // scale: scale,
+    //   ),
+    // ];
     // getData();
     super.initState();
   }
@@ -84,11 +82,11 @@ class _PreBuildPagesState extends State<PreBuildPages> {
               if (qPages.length < pageNumber + 1) {
                 QPage page = QPage();
                 page.getByPage(pageNumber + 1);
-                qPages.add(QPageScreen(
-                  pageNumber: pageNumber + 1,
-                  page: page.suras,
-                  // scale: scale,
-                ));
+                // qPages.add(QPageScreen(
+                //   pageNumber: pageNumber + 1,
+                //   page: page.suras,
+                //   // scale: scale,
+                // ));
               }
               print(qPages.length);
 

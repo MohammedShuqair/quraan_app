@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tt9_quraan_app/models/page.dart';
-import 'package:tt9_quraan_app/screens/PreBuildPages.dart';
 import 'package:tt9_quraan_app/screens/all_pages.dart';
-
+import 'package:tt9_quraan_app/screens/pre_build_pages.dart';
+import '../servises/page/page_provider.dart';
 import 'home.dart';
 
 class LoadingScreen extends StatefulWidget {
-  const LoadingScreen({super.key});
+  const LoadingScreen({
+    super.key,
+  });
 
   @override
   LoadingScreenState createState() => LoadingScreenState();
@@ -46,6 +49,7 @@ class LoadingScreenState extends State<LoadingScreen> {
 
   static const int pageNo = 604;
   late Stream<int> _stream;
+
   Stream<int> getAllPage() async* {
     List<QPage> pages = [];
     for (int i = 1; i <= pageNo; i++) {
@@ -60,12 +64,19 @@ class LoadingScreenState extends State<LoadingScreen> {
         // return MyHomePage(
         //   page: page,
         // );
-        return AllPagesScreen(pages: pages);
+        return ChangeNotifierProvider(
+          create: (BuildContext context) =>
+              PageProvider()..init(context, pages),
+          child: QuranScreen(
+            pages: pages,
+          ),
+        );
       }));
     }
   }
 
   int progress = 0;
+
   @override
   void initState() {
     getAllPage().listen((event) {
@@ -84,7 +95,7 @@ class LoadingScreenState extends State<LoadingScreen> {
     return Scaffold(
         body: Center(
       child: CircularProgressIndicator(
-        value: (pageNo) / 604,
+        value: (progress) / pageNo,
       ),
     ));
   }

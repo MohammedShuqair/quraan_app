@@ -21,12 +21,12 @@ class Tafseer {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['tafseer_id'] = this.tafseerId;
-    data['tafseer_name'] = this.tafseerName;
-    data['ayah_url'] = this.ayahUrl;
-    data['ayah_number'] = this.ayahNumber;
-    data['text'] = this.text;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['tafseer_id'] = tafseerId;
+    data['tafseer_name'] = tafseerName;
+    data['ayah_url'] = ayahUrl;
+    data['ayah_number'] = ayahNumber;
+    data['text'] = text;
     return data;
   }
 }

@@ -54,18 +54,18 @@ class Aya {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['jozz'] = this.jozz;
-    data['sura_no'] = this.suraNo;
-    data['sura_name_en'] = this.suraNameEn;
-    data['sura_name_ar'] = this.suraNameAr;
-    data['page'] = this.page;
-    data['line_start'] = this.lineStart;
-    data['line_end'] = this.lineEnd;
-    data['aya_no'] = this.ayaNo;
-    data['aya_text'] = this.ayaText;
-    data['aya_text_emlaey'] = this.ayaTextEmlaey;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['jozz'] = jozz;
+    data['sura_no'] = suraNo;
+    data['sura_name_en'] = suraNameEn;
+    data['sura_name_ar'] = suraNameAr;
+    data['page'] = page;
+    data['line_start'] = lineStart;
+    data['line_end'] = lineEnd;
+    data['aya_no'] = ayaNo;
+    data['aya_text'] = ayaText;
+    data['aya_text_emlaey'] = ayaTextEmlaey;
     return data;
   }
 }
