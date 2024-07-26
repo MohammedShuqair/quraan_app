@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tt9_quraan_app/servises/page/page_provider.dart';
-import 'package:tt9_quraan_app/servises/provider.dart';
-import 'screens/loading_screen.dart';
+import 'package:tt9_quraan_app/features/template/presentation/pages/splash_screen.dart';
+import 'package:tt9_quraan_app/features/template/presentation/providers/bookmark_provider.dart';
 
 void main() {
   runApp(MultiProvider(
@@ -23,10 +22,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         theme: ThemeData(
+            fontFamily: "UthmanverHafs",
             appBarTheme: const AppBarTheme(foregroundColor: Colors.black)),
-        home: Directionality(
+        home: const Directionality(
           textDirection: TextDirection.rtl,
-          child: LoadingScreen(),
+          child: SplashScreen(),
         ));
   }
 }
